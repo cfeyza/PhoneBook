@@ -1,15 +1,19 @@
 from phonebook_ui import PhoneBookUI
 import mysql.connector
+import os
+from dotenv import load_dotenv
 
 class PhoneBookSQL:
     def __init__(self):
+        load_dotenv()  # .env dosyasını yükler
         self.conn = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="mysql1234",
-            database="phonebook_db"
+            host=os.getenv("DB_HOST"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD"),
+            database=os.getenv("DB_NAME")
         )
         self.cursor = self.conn.cursor()
+
 
     def load_data(self):
         """

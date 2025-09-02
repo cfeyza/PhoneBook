@@ -1,0 +1,20 @@
+# PyQt / Python proje dosyaları
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.spec
+
+# Database bağlantı bilgileri
+.env
+
+# IDE / sistem dosyaları
+*.idea/
+*.vscode/
+.DS_Store
+Thumbs.db
+
+# Excel / CSV / geçici dosyalar
+*.xlsx
+*.xls
+*.csv
