@@ -200,9 +200,6 @@ class PhoneBookUI(QtWidgets.QMainWindow):
         self.table.setAlternatingRowColors(True)
         # Satır ve sütun çizgilerini göster
         self.table.setShowGrid(True)
-
-        # Çizgi rengini değiştir
-        self.table.setGridStyle(QtCore.Qt.SolidLine)
         
         main_layout.addWidget(self.table)
 
