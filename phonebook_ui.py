@@ -45,7 +45,6 @@ class PhoneBookUI(QtWidgets.QMainWindow):
         color: #2E3D2F;
         /*gridline-color: rgba(191,255,0,150);*/
         gridline-color: rgba(191,255,0,180);  /* Grid çizgileri görünür */
-        alternate-background-color: rgba(191,255,0,40); /* Zebra efekti */
         }
         QHeaderView::section {
         background-color: rgba(191,255,0,180);
@@ -53,7 +52,7 @@ class PhoneBookUI(QtWidgets.QMainWindow):
         padding: 4px;
         border: 1px solid rgba(191,255,0,150);
         }
-        QTableWidget::item:selected { background-color: rgba(191,255,0,120); }
+        QTableWidget::item:selected { background-color: rgba(191,255,0,180); }
         QLabel#photo_preview {
         background-color: #FFFFFF;
         border: 1px solid rgba(191,255,0,180);
@@ -196,8 +195,6 @@ class PhoneBookUI(QtWidgets.QMainWindow):
         header.setSectionResizeMode(8, QtWidgets.QHeaderView.ResizeMode.Fixed)
         header.setSectionResizeMode(9, QtWidgets.QHeaderView.ResizeMode.Fixed)
 
-        # Zebra efektini aktif etmek için table ayarı:
-        self.table.setAlternatingRowColors(True)
         # Satır ve sütun çizgilerini göster
         self.table.setShowGrid(True)
         
