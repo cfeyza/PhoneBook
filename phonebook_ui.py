@@ -3,6 +3,7 @@ import os, sys
 from PyQt6.QtWidgets import QApplication
 
 class PhoneBookUI(QtWidgets.QMainWindow):
+
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Telefon Rehberi")
@@ -13,8 +14,8 @@ class PhoneBookUI(QtWidgets.QMainWindow):
         else:
                 base_path = os.path.dirname(__file__)
 
-                icon_path = os.path.join(base_path, "icon_df.png")
-                self.setWindowIcon(QtGui.QIcon(icon_path))
+        icon_path = os.path.join(base_path, "icon_df.ico")
+        self.setWindowIcon(QtGui.QIcon(icon_path))
 
         central_widget = QtWidgets.QWidget()
         self.setCentralWidget(central_widget)
@@ -174,8 +175,8 @@ class PhoneBookUI(QtWidgets.QMainWindow):
         self.table.setHorizontalHeaderLabels(["ID", "Ad", "Soyad", "Telefon", "E-Posta", "Adres", "Fotoğraf", "Doğum Günü", "Açıklama", "Grup"])
         self.table.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectionBehavior.SelectRows)
         #Tabloda seçim yapılırken tüm satır seçilir. Yani hücreye tıklasan bile tüm satır mavi olur.
-        self.table.setSelectionMode(QtWidgets.QAbstractItemView.SelectionMode.SingleSelection)
-        #self.table.setSelectionMode(QtWidgets.QAbstractItemView.SelectionMode.MultiSelection)
+        #self.table.setSelectionMode(QtWidgets.QAbstractItemView.SelectionMode.SingleSelection)
+        self.table.setSelectionMode(QtWidgets.QAbstractItemView.SelectionMode.MultiSelection)
         #Bu ayar sayesinde kullanıcı birden fazla satırı seçebilir (örn. Shift veya Ctrl tuşlarıyla).
         self.table.setEditTriggers(QtWidgets.QAbstractItemView.EditTrigger.NoEditTriggers)
         #Bu tablo hücrelerinin düzenlenebilir olmadığını belirtir. Kullanıcı çift tıklasa bile içerik değiştirilemez.

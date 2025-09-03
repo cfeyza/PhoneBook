@@ -1,5 +1,4 @@
 import webbrowser
-import openpyxl
 import pandas as pd
 
 import sys
@@ -36,7 +35,7 @@ class PhoneBookApp(PhoneBookUI):
         self.btn_foto_temizle.clicked.connect(self.clear_photo)
 
         self.btn_clear_form.clicked.connect(self.clear_form)
-        
+
         # === Başlangıçta grupları DB'den yükle ===
         self.load_groups()
         # Butona tıklama
@@ -204,6 +203,8 @@ class PhoneBookApp(PhoneBookUI):
         self.photo_preview.clear()
         self.photo_preview.setText("Önizleme")
         self.current_photo_data = None
+        # Seçili satırı temizle
+        self.table.clearSelection()
     
     def export_csv(self):
         """Tablodaki verileri CSV olarak kaydeder."""
@@ -271,43 +272,6 @@ class PhoneBookApp(PhoneBookUI):
             QtWidgets.QMessageBox.critical(self, "Hata", f"Excel kaydedilirken hata oluştu:\n{str(e)}")
 
         # === E-POSTA GÖNDER ===
-    
-    def export_excel(self):
-        # Kullanıcıdan kaydetme yolu al
-        path, _ = QtWidgets.QFileDialog.getSaveFileName(self, "Excel olarak kaydet", "", "Excel Files (*.xlsx)")
-        if not path:
-            return
-
-        # Workbook oluştur
-        wb = openpyxl.Workbook()
-        ws = wb.active
-        ws.title = "Telefon Rehberi"
-
-        # Görünür sütunları al
-        visible_columns = [col for col in range(self.table.columnCount()) if not self.table.isColumnHidden(col)]
-
-        # Başlıkları yaz
-        headers = []
-        for col in visible_columns:
-            header_item = self.table.horizontalHeaderItem(col)
-            headers.append(header_item.text() if header_item else f"Column {col}")
-        ws.append(headers)
-
-        # Verileri yaz
-        for row in range(self.table.rowCount()):
-            row_data = []
-            for col in visible_columns:
-                item = self.table.item(row, col)
-                row_data.append(item.text() if item else "")
-            ws.append(row_data)
-
-        # Dosyayı kaydet
-        try:
-            wb.save(path)
-            QtWidgets.QMessageBox.information(self, "Başarılı", "Excel dosyası başarıyla kaydedildi!")
-        except Exception as e:
-            QtWidgets.QMessageBox.critical(self, "Hata", f"Excel kaydedilirken hata oluştu:\n{str(e)}")
-
     def send_email(self):
         selected_row = self.table.currentRow()
         if selected_row < 0:
@@ -504,6 +468,11 @@ class PhoneBookApp(PhoneBookUI):
                 else:
                     self.table.setItem(row_number, column_number, QtWidgets.QTableWidgetItem(str(data)))
 
+        # ---- EVENT FILTER ----
+        self.table.viewport().installEventFilter(self)  # tablo içi boş alan tıklaması için
+
+        # ---- CELL CLICKED TOGGLE ----
+        self.table.cellClicked.connect(self.on_cell_clicked)
 
 
 if __name__ == "__main__":
