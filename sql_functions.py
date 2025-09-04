@@ -147,3 +147,12 @@ class PhoneBookSQL:
         if result:
             return result[0]  # BLOB
         return None
+
+    def add_contacts_bulk(self, contacts):
+        sql = """
+        INSERT INTO contacts 
+        (ad, soyad, telefon, email, adres, photo, dogum_gunu, aciklama, grup_id)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """
+        self.cursor.executemany(sql, contacts)
+        self.conn.commit()

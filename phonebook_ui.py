@@ -1,6 +1,11 @@
 from PyQt6 import QtWidgets, QtCore, QtGui
 import os, sys
 from PyQt6.QtWidgets import QApplication
+import ctypes  # ← bunu ekliyoruz
+
+# Windows görev çubuğu için AppID atama
+if sys.platform.startswith("win"):
+    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("com.asena.PhoneBook")
 
 class PhoneBookUI(QtWidgets.QMainWindow):
 

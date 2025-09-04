@@ -1,6 +1,6 @@
 import webbrowser
 import pandas as pd
-
+import openpyxl
 import sys
 from PyQt6 import QtWidgets
 from phonebook_ui import PhoneBookUI
@@ -366,6 +366,7 @@ class PhoneBookApp(PhoneBookUI):
         self.photo_preview.setText("Önizleme")
         self.current_photo_data = None  # SQL'e None olarak gönder
         
+
     # === Toplu İçe Aktar ===
     def bulk_import(self):
         def safe_str(value):
@@ -385,7 +386,10 @@ class PhoneBookApp(PhoneBookUI):
                 df = pd.read_excel(file_path)
 
             # Her satır için kişi ekle
+            contacts = []
             for _, row in df.iterrows():
+            #for row in df.itertuples(index=False):
+                #ad = safe_str(row["Ad"])
                 ad = safe_str(row.get("Ad"))
                 soyad = safe_str(row.get("Soyad"))
                 telefon = safe_str(row.get("Telefon"))
@@ -396,9 +400,7 @@ class PhoneBookApp(PhoneBookUI):
                 dogum_gunu = row.get("Doğum Günü", None)
 
                 # Grup yoksa ekle, varsa ID'sini al
-                grup_id = None
-                if grup_adi:
-                    grup_id = self.sql_commands.add_group(grup_adi)
+                grup_id = self.sql_commands.add_group(grup_adi) if grup_adi else None
 
                 # Dogum günü kontrolü
                 if pd.isna(dogum_gunu):
@@ -410,10 +412,10 @@ class PhoneBookApp(PhoneBookUI):
 
                 # Kişiyi ekle
                 if ad and soyad and telefon:
-                    self.sql_commands.add_contact(
-                        ad, soyad, telefon, email, adres, None, dogum_gunu, aciklama, grup_id
-                    )
-
+                    contacts.append((ad, soyad, telefon, email, adres, None, dogum_gunu, aciklama, grup_id))
+                
+            # Tek seferde ekle
+            self.sql_commands.add_contacts_bulk(contacts)
             # Tabloları yeniden yükle
             self.load_data()
             QtWidgets.QMessageBox.information(self, "Başarılı", "Toplu import tamamlandı!")
@@ -468,12 +470,7 @@ class PhoneBookApp(PhoneBookUI):
                 else:
                     self.table.setItem(row_number, column_number, QtWidgets.QTableWidgetItem(str(data)))
 
-        # ---- EVENT FILTER ----
-        self.table.viewport().installEventFilter(self)  # tablo içi boş alan tıklaması için
-
-        # ---- CELL CLICKED TOGGLE ----
-        self.table.cellClicked.connect(self.on_cell_clicked)
-
+        self.table.clearSelection()
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
